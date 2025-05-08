@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import dotenv from "dotenv";
 
 const app = express();
 app.use(express.json());
@@ -23,7 +24,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const connectString = "mongodb+srv://admin:admin@postitcluster.dmmi1.mongodb.net/PostITApp?retryWrites=true&w=majority&appName=PostITCluster";
+dotenv.config();
+
+const connectString = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 mongoose.connect(connectString, {
   useNewUrlParser: true,
@@ -53,20 +56,20 @@ app.post("/registerUser", async (req, res) => {
   }
 });
 
-app.post('/login', async (req,res) =>{
-  try{
-      const {email,password} = req.body;
-      const user = await UserModel.findOne({email:email});
-      if(!user){
-        return res.status(500).json({error:"User not found."});
-      }
-      const passwordMatch = await bcrypt.compare(password,user.password);
-      if(!password){
-        return res.status(500).json({error:"Authentication failed"});
-      }
-      res.status(200).json({user,message:"Success"});
-  }catch(error){
-    res.status(500).json({error:error.message});
+app.post('/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await UserModel.findOne({ email: email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: "Authentication failed" });
+    }
+    res.status(200).json({ user, message: "Success" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -74,18 +77,18 @@ app.post("/logout", async (req,res)=>{
   res.status(200).json({message:"Logged out successfully"});
 });
 
-app.post("/savePost", async(req, res)=>{
-  try{
+app.post("/savePost", async (req, res) => {
+  try {
     const postMsg = req.body.postMsg;
     const email = req.body.email;
     const post = new PostModel({
-      postMsg:postMsg,
-      email:email,
+      postMsg: postMsg,
+      email: email,
     });
     await post.save();
-    res.send({post:post,msg:"Added."});
-  }catch(error){
-    res.statusMessage(500).json({error:"An error occurred"});
+    res.send({ post: post, msg: "Added." });
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred" });
   }
 });
 app.get("/getPosts", async(req, res)=>{
@@ -191,7 +194,8 @@ app.put("/likePost/:postId", async (req, res) => {
     }
   );
   
-  
-app.listen(3001, () => {
-  console.log("You are connected");
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

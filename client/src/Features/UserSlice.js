@@ -16,7 +16,7 @@ export const updateUserProfile = createAsyncThunk(
    
 
       const response = await axios.put(
-        `https://postit-app-server-jywo.onrender.com/updateUserProfile/${userData.get("email")}`,
+        `https://postit-app-server-770g.onrender.com/updateUserProfile/${userData.get("email")}`,
         
     userData,
         
@@ -39,7 +39,7 @@ export const updateUserProfile = createAsyncThunk(
 export const logout = createAsyncThunk("/users/logout", 
   async()=>{
     try{
-      const response = await axios.post("https://postit-app-server-jywo.onrender.com/logout");
+      const response = await axios.post("https://postit-app-server-770g.onrender.com/logout");
       console.log(response);
 
     }catch(error){
@@ -51,7 +51,7 @@ export const logout = createAsyncThunk("/users/logout",
 export const login = createAsyncThunk('users/login', 
   async(userData) =>{
     try{
-      const response = await axios.post("https://postit-app-server-jywo.onrender.com/login", {
+      const response = await axios.post("https://postit-app-server-770g.onrender.com/login", {
         email:userData.email,
         password:userData.password,
       });
@@ -69,7 +69,7 @@ export const login = createAsyncThunk('users/login',
 export const registerUser = createAsyncThunk('users/registerUser',
   async(userData) =>{
     try{
-        const response = await axios.post('https://postit-app-server-jywo.onrender.com/registerUser',{
+        const response = await axios.post('https://postit-app-server-770g.onrender.com/registerUser',{
           name:userData.name,
           email:userData.email,
           password:userData.password,

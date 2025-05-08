@@ -6,7 +6,7 @@ const User = () => {
   const email = useSelector((state)=> state.users.user.email);
   const name = useSelector((state)=> state.users.user.name);
   const user = useSelector((state) => state.users.user);
-  const picURL = "http://localhost:3001/uploads/" + user.profilePic;
+  const picURL = "https://postit-app-server-jywo.onrender.com/uploads/" + user.profilePic;
 
   return (
     <div>

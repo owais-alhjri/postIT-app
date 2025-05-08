@@ -10,7 +10,7 @@ export const likePost = createAsyncThunk("posts/likePost", async (postData) => {
     console.log("Post data for likePost:", postData);
     try {
       const response = await axios.put(
-        `http://localhost:3001/likePost/${postData.postId}`,
+        `https://postit-app-server-jywo.onrender.com/likePost/${postData.postId}`,
         {
           userId: postData.userId,
         }
@@ -26,7 +26,7 @@ export const likePost = createAsyncThunk("posts/likePost", async (postData) => {
 export const getPosts = createAsyncThunk("post/getPosts", 
     async() =>{
         try{
-            const response = await axios.get("http://localhost:3001/getPosts");
+            const response = await axios.get("https://postit-app-server-jywo.onrender.com/getPosts");
             console.log(response);
             return response.data.posts;
         }catch(error){
@@ -40,7 +40,7 @@ export const savePost = createAsyncThunk("posts/savePost",
         
         try{
             const response = await
-            axios.post("http://localhost:3001/savePost",{
+            axios.post("https://postit-app-server-jywo.onrender.com/savePost",{
                 postMsg:postData.postMsg,
                 email:postData.email,
             });
